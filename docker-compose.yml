@@ -25,6 +25,7 @@ services:
       - ./:/var/www/html
       - ./.docker/php/:/usr/local/etc/php/
     build: ./.docker/
+    command: bash -c "chmod -R 777 /var/www/html/web/sites/default && php-fpm"
     environment:
       - SMTP_HOST=smtp.gmail.com
       - SMTP_PORT=587
