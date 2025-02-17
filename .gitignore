@@ -1,0 +1,11 @@
+./vendor
+
+./vendor/*
+
+./.env
+
+./backup/*
+
+./.docker/mysqldata
+
+./.docker/mysqldata/*
