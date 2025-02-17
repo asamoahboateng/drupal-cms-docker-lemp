@@ -58,11 +58,13 @@ COPY crontab /etc/cron.d/backup
 
 RUN crontab /etc/cron.d/backup
 
+# make folder writable
+RUN chmod 755 -R /var/www/html/web/sites/default
+
 # Set working directory
 WORKDIR /var/www/html
 
-# make folder writable
-RUN chmod 777 -R /var/www/html/web/sites/default
+
 
 # Set permissions
 RUN chown -R www-data:www-data /var/www/html
