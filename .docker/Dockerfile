@@ -52,7 +52,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 
 COPY ./mysql/backup.sh /usr/local/bin
 
-RUN chmod -R 777 /var/www/html/web/sites/default
+RUN mkdir -p /var/www/html/web/sites/default &&  chmod -R 777 /var/www/html/web/sites/default
 RUN chmod +x /usr/local/bin/backup.sh
 
 COPY crontab /etc/cron.d/backup
