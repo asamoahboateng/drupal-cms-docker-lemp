@@ -6,6 +6,6 @@
 
 ./backup/*
 
-./.docker/mysqldata
+./.docker/mysql/mysqldata
 
-./.docker/mysqldata/*
+./.docker/mysql/mysqldata/*
