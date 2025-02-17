@@ -1,0 +1,96 @@
+# Services
+services:
+
+  # Nginx Service
+  nginx_server:
+    image: nginx:latest
+    container_name: nginx_server
+    env_file:
+      - ./.env
+    ports:
+      - ${SERVER_HOST_PORT}:80
+      - ${SERVER_HOST_PORT_SSL}:443
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/nginx/conf.d:/etc/nginx/conf.d
+    depends_on:
+      - php_app
+
+  # PHP Service
+  php_app:
+    image: php:8.3-fpm
+    container_name: php_app
+    working_dir: /var/www/html
+    volumes:
+      - ./:/var/www/html
+      - ./.docker/php.ini:/usr/local/etc/php/php.ini
+    build: ./.docker/
+    environment:
+      - SMTP_HOST=smtp.gmail.com
+      - SMTP_PORT=587
+      - SMTP_USER=your-email@gmail.com
+      - SMTP_PASSWORD=your-email-password
+
+  # MySQL Service
+  db:
+    image: mysql:8.0
+    container_name: db
+    restart: always
+    ports:
+      - "3305:3306"
+    env_file:
+      - ./.env
+    environment:
+      - MYSQL_ROOT_HOST="%"
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+    
+    volumes:
+      - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+      - ./.docker/mysql/mysqldata:/var/lib/mysql
+    healthcheck:
+      test: mysqladmin ping -h 127.0.0.1 -u root --password=$$MYSQL_ROOT_PASSWORD
+      interval: 5s
+      retries: 10
+  #database backup
+  # backup:
+  #   image: mysql:8.0
+  #   container_name: db_backup
+  #   volumes:
+  #     - ./.docker/mysql/my.cnf:/etc/mysql/my.cnf
+  #     - ./dockker/mysql/backup.sh:/backup.sh
+  #     - ./backup:/var/backups
+  #   command: bash -c "bash /backup.sh"
+  #   env_file:
+  #     - .env
+  #   depends_on:
+  #     - db
+  # cron:
+  #   image: cron
+  #   volumes:
+  #     - ./.docker/crontab:/etc/cron.d/crontab
+  #   command: crond -f
+  
+  # phpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_ui
+    restart: always
+    ports:
+      - "8081:80"
+    env_file:
+      - ./.env
+    environment:
+      - PMA_HOST=${DB_HOST}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+
+# Volumes
+volumes:
+  mysqldata:
+
+
+  

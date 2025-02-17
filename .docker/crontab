@@ -1,0 +1,2 @@
+#run cron at 2am
+0 2 * * * root bash /backup.sh
