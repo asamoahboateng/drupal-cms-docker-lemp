@@ -70,3 +70,4 @@ RUN chown -R www-data:www-data /var/www/html
 
 # make folder writable
 #RUN [ -d /var/www/html/web/sites/default ] && chmod 755 -R /var/www/html/web/sites/default
+RUN  chmod 755 -R web/sites/default/
