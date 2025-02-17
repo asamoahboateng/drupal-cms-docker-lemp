@@ -23,7 +23,7 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./:/var/www/html
-      - ./.docker/php.ini:/usr/local/etc/php/php.ini
+      - ./.docker/php/:/usr/local/etc/php/
     build: ./.docker/
     environment:
       - SMTP_HOST=smtp.gmail.com
